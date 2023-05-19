@@ -38,7 +38,10 @@ jobs:
       - name: Install modules
         run: dzil listdeps | cpanm --notes
       - name: Run tests
-        run: dzil test
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          dzil test
       - name: Archive CPAN logs on Windows
         if: ${{ failure() && matrix.os == 'windows-latest' }}
         uses: actions/upload-artifact@v3
