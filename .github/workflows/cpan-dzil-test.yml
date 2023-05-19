@@ -36,7 +36,7 @@ jobs:
       - name: Install Dist::Zilla plugins
         run: dzil authordeps | cpanm --notest
       - name: Install modules
-        run: cpanm --notest --installdeps .
+        run: dzil listdeps | cpanm --notes
       - name: Run tests
         run: dzil test
       - name: Archive CPAN logs on Windows
