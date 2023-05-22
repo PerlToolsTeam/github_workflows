@@ -36,7 +36,7 @@ jobs:
       - name: Install Dist::Zilla plugins
         run: dzil authordeps | cpanm --notest
       - name: Install modules
-        run: dzil listdeps | cpanm --notes
+        run: dzil listdeps --author | cpanm --notest
       - name: Run tests
         run: |
           git config user.name "GitHub Actions Bot"
