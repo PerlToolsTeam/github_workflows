@@ -1,0 +1,28 @@
+name: Basic CI
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - 'ubuntu-latest'
+        perl:
+          - 'latest'
+    name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Perl version
+        run: perl -V
+      - name: Install Perl::Critic
+        run: cpanm --notest Perl::Critic
+      - name: Run perlcritic
+        run: perlcritic .
+
