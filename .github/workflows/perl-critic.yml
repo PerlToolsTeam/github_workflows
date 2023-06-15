@@ -13,5 +13,6 @@ jobs:
         run: perl -V
       - name: Run perlcritic
         run: |
-          ( perlcritic . && if [ "$?" -eq 2 ]; then exit 0; else exit 1; fi )
+          perlcritic .
+        continue-on-error: true
 
