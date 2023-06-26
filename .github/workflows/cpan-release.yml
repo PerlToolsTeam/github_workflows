@@ -1,0 +1,34 @@
+name: Basic CI
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - 'ubuntu-latest'
+        perl:
+          - 'latest'
+    name: Build and release
+    steps:
+      - uses: actions/checkout@v3
+      - name: Perl version
+        run: perl -V
+      - name: Install modules
+        run: cpanm --notest --installdeps .
+      - name: Build with Build.PL
+        if: ${{ hashFiles('Build.PL') != '' }}
+        run: |
+          perl Build.PL
+          ./Build dist
+          ./Build disttest
+      - name: Build with Makefile.PL
+        if: ${{ hashFiles('Build.PL') == '' }}
+        run: |
+          perl Makefile.PL
+          make dist
+          make disttest
+
