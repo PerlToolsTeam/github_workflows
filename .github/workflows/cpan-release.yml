@@ -24,13 +24,13 @@ jobs:
       - name: Build with Build.PL
         if: ${{ hashFiles('Build.PL') != '' }}
         run: |
-          perl Build.PL
-          ./Build dist
-          ./Build disttest
+          sudo perl Build.PL
+          sudo ./Build dist
+          sudo ./Build disttest
       - name: Build with Makefile.PL
         if: ${{ hashFiles('Build.PL') == '' }}
         run: |
-          perl Makefile.PL
-          make dist
-          make disttest
+          sudo perl Makefile.PL
+          sudo make dist
+          sudo make disttest
 
