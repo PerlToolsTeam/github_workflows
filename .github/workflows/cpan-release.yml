@@ -18,7 +18,7 @@ jobs:
       - name: Perl version
         run: perl -V
       - name: Install cpanm
-        run: apt-get update && apt-get upgrade && apt-get install cpanm
+        run: sudo apt-get update && sudo apt-get upgrade && sudo apt-get install cpanm
       - name: Install modules
         run: cpanm --notest --installdeps .
       - name: Build with Build.PL
