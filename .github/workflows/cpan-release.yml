@@ -35,7 +35,7 @@ jobs:
           sudo make disttest
       - name: Do the other stuff
         run: |
-          jq -r .name META.yml
-          jq -r .version META.yml
+          jq -r .name META.json
+          jq -r .version META.json
           ls -l *.tar.gz
 
