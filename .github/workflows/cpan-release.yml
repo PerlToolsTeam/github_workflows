@@ -17,8 +17,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Perl version
         run: perl -V
-      - name: Install cpanm
-        run: sudo apt-get update && sudo apt-get upgrade && sudo apt-get install -y cpanminus
+      - name: Install cpanm and jq
+        run: sudo apt-get update && sudo apt-get upgrade && sudo apt-get install -y cpanminus jq
       - name: Install modules
         run: sudo cpanm --notest --installdeps --with-suggests --with-recommends --with-develop --with-configure .
       - name: Build with Build.PL
@@ -33,4 +33,7 @@ jobs:
           sudo perl Makefile.PL
           sudo make dist
           sudo make disttest
+          jq -r .name META.yml
+          jq -r .version META.yml
+          ls -l *.tar.gz
 
