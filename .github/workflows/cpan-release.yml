@@ -33,6 +33,8 @@ jobs:
           sudo perl Makefile.PL
           sudo make dist
           sudo make disttest
+      - name: Do the other stuff
+        run: |
           jq -r .name META.yml
           jq -r .version META.yml
           ls -l *.tar.gz
