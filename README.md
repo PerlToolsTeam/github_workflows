@@ -46,11 +46,11 @@ runs the CPAN test, coverage and `perlcritic` workflows would look like this:
 
     jobs:
       build:
-        uses: davorg/github_workflows/.github/workflows/cpan-test.yml@main
+        uses: PerlToolsTeam/github_workflows/.github/workflows/cpan-test.yml@main
 
       coverage:
-        uses: davorg/github_workflows/.github/workflows/cpan-coverage.yml@main
+        uses: PerlToolsTeam/github_workflows/.github/workflows/cpan-coverage.yml@main
 
       perlcritic:
-        uses: davorg/github_workflows/.github/workflows/cpan-perlcritic.yml@main
+        uses: PerlToolsTeam/github_workflows/.github/workflows/cpan-perlcritic.yml@main
 
