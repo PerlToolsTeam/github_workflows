@@ -25,3 +25,28 @@ Test the "Kwality" of your Perl code
 
 Runs the standard DistZilla testing framework
 
+## Using the workflows
+
+These workflows have all been written so that you can simply refer to
+them from within your own workflows. For example, a simple workflow that
+runs the CPAN test and coverage workflows would look like this:
+
+    name: CI
+
+    on:
+      push:
+        branches: [ main ]
+      pull_request:
+        branches: [ main ]
+      workflow_dispatch:
+
+    jobs:
+      build:
+        uses: davorg/github_workflows/.github/workflows/cpan-test.yml@main
+
+      coverage:
+        uses: davorg/github_workflows/.github/workflows/cpan-coverage.yml@main
+
+      perlcritic:
+        uses: davorg/github_workflows/.github/workflows/cpan-perlcritic.yml@main
+
