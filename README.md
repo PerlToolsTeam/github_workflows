@@ -13,6 +13,10 @@ Runs the standard Perl testing framework
 Checks the test coverage for your Perl code and reports the
 results to Coveralls.io
 
+### cpan-perlcritic
+
+Runs `perlcritic` against your Perl code
+
 ### cpan-release
 
 Releases a Perl distribution to CPAN
@@ -29,7 +33,7 @@ Runs the standard DistZilla testing framework
 
 These workflows have all been written so that you can simply refer to
 them from within your own workflows. For example, a simple workflow that
-runs the CPAN test and coverage workflows would look like this:
+runs the CPAN test, coverage and `perlcritic` workflows would look like this:
 
     name: CI
 
