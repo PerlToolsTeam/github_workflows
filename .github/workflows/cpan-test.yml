@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Perl versions action step
         id: action
-        uses: happy-barney/github-workflows/perl-versions@main
+        uses: perl-actions/perl-versions/perl-versions@main
         with:
           since-perl: "v5.24"
 
