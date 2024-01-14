@@ -17,6 +17,6 @@ jobs:
         run: perl -V
       - name: Run perlcritic
         run: |
-          perlcritic -{{ inputs.level }} .
+          perlcritic -${{ inputs.level }} .
         continue-on-error: true
 
