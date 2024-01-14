@@ -2,7 +2,11 @@ name: Basic CI
 
 on:
   workflow_call:
-
+    inputs:
+      level:
+        type: number
+        required: false
+        default: 3
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,6 +17,6 @@ jobs:
         run: perl -V
       - name: Run perlcritic
         run: |
-          perlcritic .
+          perlcritic -{{ inputs.level }} .
         continue-on-error: true
 
