@@ -6,7 +6,7 @@ on:
       level:
         type: number
         required: false
-        default: 3
+        default: 5
 jobs:
   build:
     runs-on: ubuntu-latest
