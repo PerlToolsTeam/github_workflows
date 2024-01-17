@@ -24,13 +24,15 @@ Runs `perlcritic` against your Perl code
 
 Releases a Perl distribution to CPAN
 
-#### cpan-kwality
-
-Test the "Kwality" of your Perl code
-
 #### cpan-dzil-test
 
 Runs the standard DistZilla testing framework
+
+### Thinking about it
+
+#### cpan-kwality
+
+Test the "Kwality" of your Perl code
 
 ## Using the workflows
 
