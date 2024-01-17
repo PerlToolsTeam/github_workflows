@@ -4,28 +4,31 @@ A collection of GitHub workflows to use for Perl development
 
 ## Workflows
 
-### cpan-test
+### Beta test
+
+#### cpan-test
 
 Runs the standard Perl testing framework
 
-### cpan-coverage
+#### cpan-coverage
 
-Checks the test coverage for your Perl code and reports the
-results to Coveralls.io
+Checks the test coverage for your Perl code and reports the results to Coveralls.io
 
-### cpan-perlcritic
+#### cpan-perlcritic
 
 Runs `perlcritic` against your Perl code
 
-### cpan-release
+### In early development
+
+#### cpan-release
 
 Releases a Perl distribution to CPAN
 
-### cpan-kwality
+#### cpan-kwality
 
 Test the "Kwality" of your Perl code
 
-### cpan-dzil-test
+#### cpan-dzil-test
 
 Runs the standard DistZilla testing framework
 
