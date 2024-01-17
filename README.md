@@ -10,6 +10,18 @@ A collection of GitHub workflows to use for Perl development
 
 Runs the standard Perl testing framework
 
+##### Inputs:
+
+* ***perl_version*** - List of Perl versions to run the tests against
+* ***os*** - List of operating systems to run the test on
+
+*Note:* GitHub Actions currently doesn't support lists as inputs to callable workflows.
+We work around this by passing a JSON list which is decoded in the workflow. You can see
+the format of these lists from their default values:
+
+* ***perl_version:*** "['5.24', '5.26', '5.28', '5.30', '5.32', '5.34', '5.36', '5.38']"
+* ***os:*** "['windows-latest', 'macos-latest', 'ubuntu-latest']"
+
 #### cpan-coverage
 
 Checks the test coverage for your Perl code and reports the results to Coveralls.io
@@ -17,6 +29,10 @@ Checks the test coverage for your Perl code and reports the results to Coveralls
 #### cpan-perlcritic
 
 Runs `perlcritic` against your Perl code
+
+##### Inputs:
+
+* ***level***: A number from 1 to 5 defining how brutal `perlcritic` will be. The default is 5
 
 ### In early development
 
