@@ -6,6 +6,9 @@ A collection of GitHub workflows to use for Perl development
 
 ### Beta test
 
+These workflows seem to work as expected. There probably won't be any major changes
+to them (but there will, almost certainly, be new features and bug fixes).
+
 #### cpan-test
 
 Runs the standard Perl testing framework
@@ -16,15 +19,25 @@ Runs the standard Perl testing framework
 * ***os*** - List of operating systems to run the test on
 
 *Note:* GitHub Actions currently doesn't support lists as inputs to callable workflows.
-We work around this by passing a JSON list which is decoded in the workflow. You can see
-the format of these lists from their default values:
+We work around this by passing a string containing a JSON-encoded list which is decoded
+in the workflow. You can see the format of these lists from their default values:
 
 * ***perl_version:*** "['5.24', '5.26', '5.28', '5.30', '5.32', '5.34', '5.36', '5.38']"
 * ***os:*** "['windows-latest', 'macos-latest', 'ubuntu-latest']"
 
+##### Todo
+
+* A way to install other CPAN modules (ones that, for some reason, aren't in the prereqs)
+* A way to install other required softare
+
 #### cpan-coverage
 
 Checks the test coverage for your Perl code and reports the results to Coveralls.io
+
+##### Todo
+
+* Report to coverage tools other than coveralls.io
+* Make reporting to a web site optional
 
 #### cpan-perlcritic
 
@@ -36,6 +49,9 @@ Runs `perlcritic` against your Perl code
 
 ### In early development
 
+These workflows aren't guaranteed to do what they need to yet. They'll probably change quickly
+over the coming weeks, so maybe don't use them just yet.
+
 #### cpan-release
 
 Releases a Perl distribution to CPAN
@@ -45,6 +61,9 @@ Releases a Perl distribution to CPAN
 Runs the standard DistZilla testing framework
 
 ### Thinking about it
+
+All bets are off with these workflows. I mean, you can try them but I'm giving no
+guarantees whatsoever.
 
 #### cpan-kwality
 
