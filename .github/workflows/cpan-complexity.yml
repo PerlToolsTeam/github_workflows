@@ -1,0 +1,22 @@
+name: Cyclomatic complexity
+
+on:
+  workflow_call:
+    inputs:
+      level:
+        type: number
+        required: false
+        default: 5
+jobs:
+  cyclomatic-complexity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Perl::Metrics::Simple
+        run: cpan Perl::Metrics::Simple
+      - uses: actions/checkout@v4
+      - name: Perl version
+        run: perl -V
+      - name: Run perlcritic
+        run: |
+          countperl lib
+
