@@ -1,4 +1,4 @@
-name: Basic CI
+name: Linting
 
 on:
   workflow_call:
@@ -8,7 +8,7 @@ on:
         required: false
         default: 5
 jobs:
-  build:
+  linting:
     runs-on: ubuntu-latest
     container: davorg/perl-perlcritic
     steps:

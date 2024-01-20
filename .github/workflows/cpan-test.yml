@@ -1,4 +1,4 @@
-name: Basic CI
+name: Unit tests
 
 on:
   workflow_call:
@@ -15,7 +15,7 @@ on:
         default: "['windows-latest', 'macos-latest', 'ubuntu-latest']"
 
 jobs:
-  build:
+  testing:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

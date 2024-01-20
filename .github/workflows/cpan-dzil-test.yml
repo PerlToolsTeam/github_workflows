@@ -1,10 +1,10 @@
-name: Basic CI
+name: Unit tests
 
 on:
   workflow_call:
 
 jobs:
-  build:
+  testing:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

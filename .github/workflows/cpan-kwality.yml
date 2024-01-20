@@ -1,10 +1,10 @@
-name: Basic CI
+name: Kwality
 
 on:
   workflow_call:
 
 jobs:
-  build:
+  kwality:
     runs-on: ubuntu-latest
     container: davorg/perl-perlcritic
     steps:

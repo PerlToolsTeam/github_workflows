@@ -1,10 +1,10 @@
-name: Basic CI
+name: Release to CPAN
 
 on:
   workflow_call:
 
 jobs:
-  build:
+  release:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
