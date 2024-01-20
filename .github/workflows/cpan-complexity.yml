@@ -11,9 +11,12 @@ jobs:
   cyclomatic-complexity:
     runs-on: ubuntu-latest
     steps:
+      - name: Install cpanminus
+        run: sudo apt-get install -y cpanminus
       - name: Install Perl::Metrics::Simple
-        run: cpan Perl::Metrics::Simple
-      - uses: actions/checkout@v4
+        run: cpanm Perl::Metrics::Simple
+      - name: Check out code
+        uses: actions/checkout@v4
       - name: Perl version
         run: perl -V
       - name: Run perlcritic
