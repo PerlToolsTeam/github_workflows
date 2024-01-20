@@ -14,7 +14,7 @@ jobs:
       - name: Install cpanminus
         run: sudo apt-get install -y cpanminus
       - name: Install Perl::Metrics::Simple
-        run: cpanm Perl::Metrics::Simple
+        run: sudo cpanm Perl::Metrics::Simple
       - name: Check out code
         uses: actions/checkout@v4
       - name: Perl version
