@@ -69,6 +69,10 @@ guarantees whatsoever.
 
 Test the "Kwality" of your Perl code
 
+#### cpan-complexity
+
+Report on the cyclomatic complexity of your code
+
 ## Using the workflows
 
 These workflows have all been written so that you can simply refer to
