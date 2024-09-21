@@ -32,6 +32,16 @@ jobs:
         run: perl -V
       - name: Install modules
         run: cpanm --notest --installdeps .
+      - name: Configure with Build.PL
+        if: ${{ hashFiles('Build.PL') != '' }}
+        run: |
+          perl Build.PL
+          ./Build
+      - name: Configure with Makefile.PL
+        if: ${{ hashFiles('Makefile.PL') != '' }}
+        run: |
+          perl Makefile.PL
+          make
       - name: Run tests
         run: prove -lv t
       - name: Archive CPAN logs on Windows
