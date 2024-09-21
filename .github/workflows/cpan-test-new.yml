@@ -36,7 +36,7 @@ jobs:
         run: perl -V
       - name: Set testing contexts
         run: |
-          mapfile -t arr < <(echo "${{ inputs.test_contexts }}" | jq -r '.[]')
+          mapfile -t arr < <(echo "${{ inputs.testing_contexts }}" | jq -r '.[]')
           for item in "${arr[@]}"; do
             var_name="${item^^}_TESTING"
             echo "$var_name=1" >> "$GITHUB_ENV"
