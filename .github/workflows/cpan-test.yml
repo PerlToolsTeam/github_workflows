@@ -31,7 +31,7 @@ jobs:
       - name: Perl version
         run: perl -V
       - name: Install modules
-        run: cpanm --notest --installdeps .
+        run: cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
       - name: Configure with Build.PL
         if: ${{ hashFiles('Build.PL') != '' }}
         run: |
