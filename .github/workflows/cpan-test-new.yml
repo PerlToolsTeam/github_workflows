@@ -36,10 +36,10 @@ jobs:
         run: perl -V
       - name: Set testing contexts
         run: |
-          for context in ${{ fromJson(inputs.testing_contexts) }}
-          do
-            var=${context,,}_TESTING
-            echo $var=1
+          mapfile -t arr < <(echo "{{ inputs.test_contexts }}" | jq -r '.[]')
+          for item in "${arr[@]}"; do
+            var_name="${item^^}_TESTING"
+            echo "$var_name"=1
           done
       - name: Install modules
         run: cpanm --notest --installdeps .
