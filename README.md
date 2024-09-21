@@ -25,6 +25,8 @@ in the workflow. You can see the format of these lists from their default values
 * ***perl_version:*** "['5.24', '5.26', '5.28', '5.30', '5.32', '5.34', '5.36', '5.38']"
 * ***os:*** "['windows-latest', 'macos-latest', 'ubuntu-latest']"
 
+*Note:* The `cpan-test` workflow now includes configure steps to run `perl Build.PL` if `Build.PL` exists, and `perl Makefile.PL` if `Makefile.PL` exists, before running `prove`.
+
 ##### Todo
 
 * A way to install other CPAN modules (ones that, for some reason, aren't in the prereqs)
