@@ -32,30 +32,24 @@ jobs:
         run: perl -V
       - name: Install modules
         run: cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
-      - name: Identify installer
-        id: installer-selector
-        run: |
-          if [ -f Makefile.PL ]; then
-            printf '%s\n' 'INSTALLER=EUMM' >> "${GITHUB_OUTPUT}"
-          elif [ -f Build.PL ]; then
-            printf '%s\n' 'INSTALLER=MB'   >> "${GITHUB_OUTPUT}"
-          fi
       - name: Configure with Makefile.PL
-        if: ${{ steps.installer-selector.outputs.INSTALLER == 'EUMM' }}
+        id: configure-with-eumm
+        if: ${{ hashFiles('Makefile.PL') != '' }}
         run: |
           perl Makefile.PL
           make
       - name: Configure with Build.PL
-        if: ${{ steps.installer-selector.outputs.INSTALLER == 'MB'}}
+        id: configure-with-mb
+        if: ${{ hashFiles('Build.PL') != '' }}
         run: |
           perl Build.PL
           ./Build
       - name: Run tests with make
-        if: ${{ steps.installer-selector.outputs.INSTALLER == 'EUMM' }}
+        if: steps.configure-with-eumm.outcome == 'success'
         run : |
-          make TEST_VERBOS=1 test
+          make TEST_VERBOSE=1 test
       - name: Run tests with ./Build
-        if: ${{ steps.installer-selector.outputs.INSTALLER == 'MB' }}
+        if: steps.configure-with-mb.outcome == 'success'
         run : |
           ./Build verbose=1 test
       - name: Archive CPAN logs on Windows
