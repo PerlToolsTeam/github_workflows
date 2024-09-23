@@ -32,18 +32,32 @@ jobs:
         run: perl -V
       - name: Install modules
         run: cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
-      - name: Configure with Build.PL
-        if: ${{ hashFiles('Build.PL') != '' }}
+      - name: Identify installer
+        id: installer-selector
         run: |
-          perl Build.PL
-          ./Build
+          if [ -f Makefile.PL ]; then
+            printf '%s\n' 'INSTALLER=EUMM' >> "${GITHUB_OUTPUT}"
+          elif [ -f Build.PL ]; then
+            printf '%s\n' 'INSTALLER=MB'   >> "${GITHUB_OUTPUT}"
+          fi
       - name: Configure with Makefile.PL
-        if: ${{ hashFiles('Makefile.PL') != '' }}
+        if: ${{ steps.installer-selector.outputs.INSTALLER == 'EUMM' }}
         run: |
           perl Makefile.PL
           make
-      - name: Run tests
-        run: prove --blib --verbose t
+      - name: Configure with Build.PL
+        if: ${{ steps.installer-selector.outputs.INSTALLER == 'MB'}}
+        run: |
+          perl Build.PL
+          ./Build
+      - name: Run tests with make
+        if: ${{ steps.installer-selector.outputs.INSTALLER == 'EUMM' }}
+        run : |
+          make TEST_VERBOS=1 test
+      - name: Run tests with ./Build
+        if: ${{ steps.installer-selector.outputs.INSTALLER == 'MB' }}
+        run : |
+          ./Build verbose=1 test
       - name: Archive CPAN logs on Windows
         if: ${{ failure() && matrix.os == 'windows-latest' }}
         uses: actions/upload-artifact@v4
