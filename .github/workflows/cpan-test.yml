@@ -52,7 +52,7 @@ jobs:
       - name: Set testing context
         if: "!startsWith(matrix.os, 'windows')"
         run: |
-          printf '%s\n' '${{ inputs.testing_context }}' | \
+          printf '%s\n' "${{ inputs.testing_context }}" | \
           jq -r '.[]' | \
           tr '[:lower:]' '[:upper:]' | \
           while read -r item; do
