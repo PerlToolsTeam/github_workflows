@@ -13,7 +13,7 @@ on:
         required: false
         type: string
         default: "['windows-latest', 'macos-latest', 'ubuntu-latest']"
-      testing_contexts:
+      testing_context:
         required: false
         type: string
         default: '[ ]'
@@ -52,7 +52,7 @@ jobs:
       - name: Set testing context
         if: "!startsWith(matrix.os, 'windows')"
         run: |
-          printf '%s\n' '${{ inputs.testing_contexts }}' | \
+          printf '%s\n' '${{ inputs.testing_context }}' | \
           jq -r '.[]' | \
           tr '[:lower:]' '[:upper:]' | \
           while read -r item; do
