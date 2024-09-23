@@ -8,11 +8,11 @@ on:
       perl_version:
         required: false
         type: string
-        default: "['5.24', '5.26', '5.28', '5.30', '5.32', '5.34', '5.36', '5.38']"
+        default: '["5.24", "5.26", "5.28", "5.30", "5.32", "5.34", "5.36", "5.38"]'
       os:
         required: false
         type: string
-        default: "['windows-latest', 'macos-latest', 'ubuntu-latest']"
+        default: '["windows-latest", "macos-latest", "ubuntu-latest"]'
       testing_context:
         required: false
         type: string
@@ -52,8 +52,7 @@ jobs:
       - name: Set testing context
         if: "!startsWith(matrix.os, 'windows')"
         run: |
-          printf '%s\n' "${{ inputs.testing_context }}" | \
-          tr "'" '"' | \
+          printf '%s\n' '${{ inputs.testing_context }}' | \
           jq -r '.[]' | \
           tr '[:lower:]' '[:upper:]' | \
           while read -r item; do
