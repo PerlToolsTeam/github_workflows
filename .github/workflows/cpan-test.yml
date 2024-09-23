@@ -13,6 +13,10 @@ on:
         required: false
         type: string
         default: "['windows-latest', 'macos-latest', 'ubuntu-latest']"
+      testing_contexts:
+        required: false
+        type: string
+        default: '[ ]'
 
 jobs:
   testing:
@@ -44,6 +48,16 @@ jobs:
         run: |
           perl Build.PL
           ./Build
+          - name: Set testing contexts
+      - name: Set testing context
+        if: "!startsWith(matrix.os, 'windows')"
+        run: |
+          printf '%s\n' '${{ inputs.testing_contexts }}' | \
+          jq -r '.[]' | \
+          tr '[:lower:]' '[:upper:]' | \
+          while read -r item; do
+            printf '%s_TESTING=1\n' "${item}" >> "${GITHUB_ENV}"
+          done
       - name: Run tests with make
         if: steps.configure-with-eumm.outcome == 'success'
         run : |
