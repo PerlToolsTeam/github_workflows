@@ -43,7 +43,7 @@ jobs:
           perl Makefile.PL
           make
       - name: Run tests
-        run: prove -lv t
+        run: prove --blib --verbose t
       - name: Archive CPAN logs on Windows
         if: ${{ failure() && matrix.os == 'windows-latest' }}
         uses: actions/upload-artifact@v4

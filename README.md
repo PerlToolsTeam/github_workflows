@@ -30,7 +30,7 @@ in the workflow. You can see the format of these lists from their default values
 ##### Todo
 
 * A way to install other CPAN modules (ones that, for some reason, aren't in the prereqs)
-* A way to install other required softare
+* A way to install other required software
 
 #### cpan-coverage
 
@@ -91,7 +91,7 @@ runs the CPAN test, coverage and `perlcritic` workflows would look like this:
       workflow_dispatch:
 
     jobs:
-      build:
+      test:
         uses: PerlToolsTeam/github_workflows/.github/workflows/cpan-test.yml@main
 
       coverage:
