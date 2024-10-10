@@ -8,11 +8,15 @@ on:
       perl_version:
         required: false
         type: string
-        default: "['5.24', '5.26', '5.28', '5.30', '5.32', '5.34', '5.36', '5.38']"
+        default: '["5.24", "5.26", "5.28", "5.30", "5.32", "5.34", "5.36", "5.38"]'
       os:
         required: false
         type: string
-        default: "['windows-latest', 'macos-latest', 'ubuntu-latest']"
+        default: '["windows-latest", "macos-latest", "ubuntu-latest"]'
+      testing_context:
+        required: false
+        type: string
+        default: '[ ]'
 
 jobs:
   testing:
@@ -32,18 +36,36 @@ jobs:
         run: perl -V
       - name: Install modules
         run: cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
-      - name: Configure with Build.PL
-        if: ${{ hashFiles('Build.PL') != '' }}
-        run: |
-          perl Build.PL
-          ./Build
       - name: Configure with Makefile.PL
+        id: configure-with-eumm
         if: ${{ hashFiles('Makefile.PL') != '' }}
         run: |
           perl Makefile.PL
           make
-      - name: Run tests
-        run: prove --blib --verbose t
+      - name: Configure with Build.PL
+        id: configure-with-mb
+        if: ${{ hashFiles('Build.PL') != '' }}
+        run: |
+          perl Build.PL
+          ./Build
+          - name: Set testing contexts
+      - name: Set testing context
+        if: "!startsWith(matrix.os, 'windows')"
+        run: |
+          printf '%s\n' '${{ inputs.testing_context }}' | \
+          jq -r '.[]' | \
+          tr '[:lower:]' '[:upper:]' | \
+          while read -r item; do
+            printf '%s_TESTING=1\n' "${item}" >> "${GITHUB_ENV}"
+          done
+      - name: Run tests with make
+        if: steps.configure-with-eumm.outcome == 'success'
+        run : |
+          make TEST_VERBOSE=1 test
+      - name: Run tests with ./Build
+        if: steps.configure-with-mb.outcome == 'success'
+        run : |
+          ./Build verbose=1 test
       - name: Archive CPAN logs on Windows
         if: ${{ failure() && matrix.os == 'windows-latest' }}
         uses: actions/upload-artifact@v4
