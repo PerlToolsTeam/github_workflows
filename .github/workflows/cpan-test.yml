@@ -48,7 +48,6 @@ jobs:
         run: |
           perl Build.PL
           ./Build
-          - name: Set testing contexts
       - name: Set testing context
         if: ${{ !startsWith(matrix.os, 'windows') }}
         run: |
