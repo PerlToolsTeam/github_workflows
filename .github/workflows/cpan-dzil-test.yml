@@ -44,14 +44,14 @@ jobs:
           dzil test
       - name: Archive CPAN logs on Windows
         if: ${{ failure() && matrix.os == 'windows-latest' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: cpan_log
           path: C:\Users\RUNNER~1\.cpanm\work\*\build.log
           retention-days: 5
       - name: Archive CPAN logs on Unix
         if: ${{ failure() && matrix.os != 'windows-latest' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: cpan_log
           path: /home/runner/.cpanm/work/*/build.log
