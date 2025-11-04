@@ -1,0 +1,104 @@
+name: Unit tests
+
+on:
+  workflow_call:
+    inputs:
+      perl_version:
+        required: false
+        type: string
+        default: '[]'
+      os:
+        required: false
+        type: string
+        default: '["windows-latest", "macos-latest", "ubuntu-latest"]'
+      environment:
+        required: false
+        type: string
+        default: '{}'
+
+jobs:
+
+  get_versions:
+    # either use the version list provided via inputs
+    # or determine available versions >= 5.24 via Actions::Core
+    name: get perl versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shogo82148/actions-setup-perl@v1
+      - id: get-versions
+        name: get perl versions
+        shell: perl {0}
+        run: |
+          use Actions::Core;
+          use JSON::PP qw(decode_json encode_json);
+          use version;   
+          my $versions = decode_json('${{ inputs.perl_version }}');
+          @$versions = grep { version->parse($_) >= '5.24.0' } perl_versions() unless @$versions;  
+          print "Versions: ", encode_json($versions), "\n";   
+          set_output(versions => $versions);
+    outputs:
+      versions: ${{ steps.get-versions.outputs.versions }}
+
+  testing:
+    runs-on: ${{ matrix.os }}
+    needs: get_versions
+    strategy:
+      matrix:
+        os: ${{ fromJson(inputs.os) }}
+        perl: ${{ fromJson(needs.get_versions.outputs.versions) }}
+    name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Perl version
+        run: perl -V
+      - name: Set environment
+        shell: perl {0}
+        run: |
+          use Actions::Core;
+          use JSON::PP qw(decode_json);      
+          my $context = decode_json('${{ inputs.environment }}');
+          if (%$context) {
+            for my $item ( keys %$context ) {
+              export_variable($item, $context->{$item});
+            }
+          }
+      - name: Install modules
+        run: cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
+      - name: Configure with Makefile.PL
+        id: configure-with-eumm
+        if: ${{ hashFiles('Makefile.PL') != '' }}
+        run: |
+          perl Makefile.PL
+          make
+      - name: Configure with Build.PL
+        id: configure-with-mb
+        if: ${{ hashFiles('Build.PL') != '' }}
+        run: |
+          perl Build.PL
+          ./Build
+      - name: Run tests with make
+        if: steps.configure-with-eumm.outcome == 'success'
+        run : |
+          make TEST_VERBOSE=1 test
+      - name: Run tests with ./Build
+        if: steps.configure-with-mb.outcome == 'success'
+        run : |
+          ./Build verbose=1 test
+      - name: Archive CPAN logs on Windows
+        if: ${{ failure() && matrix.os == 'windows-latest' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpan_log
+          path: C:\Users\RUNNER~1\.cpanm\work\*\build.log
+          retention-days: 5
+      - name: Archive CPAN logs on Unix
+        if: ${{ failure() && matrix.os != 'windows-latest' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpan_log
+          path: /home/runner/.cpanm/work/*/build.log
+          retention-days: 5
