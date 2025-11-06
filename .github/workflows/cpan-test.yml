@@ -3,8 +3,7 @@ name: Unit tests
 on:
   workflow_call:
     inputs:
-      # This should really be an array/list, but GitHub doesn't support list
-      # inputs to reusable workflows - hence this horrible fromJson() workaround
+      # Still using JSON-encoded arrays for matrix values
       perl_version:
         required: false
         type: string
@@ -25,57 +24,13 @@ jobs:
       matrix:
         os: ${{ fromJson(inputs.os) }}
         perl: ${{ fromJson(inputs.perl_version) }}
+
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
+
     steps:
-      - uses: actions/checkout@v5
-      - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1
+      - uses: ./.github/actions/cpan-test
         with:
-          perl-version: ${{ matrix.perl }}
-      - name: Perl version
-        run: perl -V
-      - name: Install modules
-        run: cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
-      - name: Configure with Makefile.PL
-        id: configure-with-eumm
-        if: ${{ hashFiles('Makefile.PL') != '' }}
-        run: |
-          perl Makefile.PL
-          make
-      - name: Configure with Build.PL
-        id: configure-with-mb
-        if: ${{ hashFiles('Build.PL') != '' }}
-        run: |
-          perl Build.PL
-          ./Build
-      - name: Set testing context
-        if: ${{ !startsWith(matrix.os, 'windows') }}
-        run: |
-          printf '%s\n' '${{ inputs.testing_context }}' | \
-          jq -r '.[]' | \
-          tr '[:lower:]' '[:upper:]' | \
-          while read -r item; do
-            printf '%s_TESTING=1\n' "${item}" >> "${GITHUB_ENV}"
-          done
-      - name: Run tests with make
-        if: steps.configure-with-eumm.outcome == 'success'
-        run : |
-          make TEST_VERBOSE=1 test
-      - name: Run tests with ./Build
-        if: steps.configure-with-mb.outcome == 'success'
-        run : |
-          ./Build verbose=1 test
-      - name: Archive CPAN logs on Windows
-        if: ${{ failure() && matrix.os == 'windows-latest' }}
-        uses: actions/upload-artifact@v5
-        with:
-          name: cpan_log
-          path: C:\Users\RUNNER~1\.cpanm\work\*\build.log
-          retention-days: 5
-      - name: Archive CPAN logs on Unix
-        if: ${{ failure() && matrix.os != 'windows-latest' }}
-        uses: actions/upload-artifact@v5
-        with:
-          name: cpan_log
-          path: /home/runner/.cpanm/work/*/build.log
-          retention-days: 5
+          perl_version: ${{ matrix.perl }}
+          os: ${{ matrix.os }}
+          testing_context: ${{ inputs.testing_context }}
+
