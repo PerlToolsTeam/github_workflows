@@ -28,7 +28,7 @@ jobs:
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
 
     steps:
-      - uses: PerlToolsTeam/github_workflows/.github/actions/cpan-test
+      - uses: PerlToolsTeam/github_workflows/.github/actions/cpan-test@main
         with:
           perl_version: ${{ matrix.perl }}
           os: ${{ matrix.os }}
