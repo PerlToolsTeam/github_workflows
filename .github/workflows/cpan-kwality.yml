@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container: davorg/perl-perlcritic
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Perl version
         run: perl -V
       - name: Run perlcritic
