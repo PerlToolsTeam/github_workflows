@@ -27,7 +27,7 @@ jobs:
         perl: ${{ fromJson(inputs.perl_version) }}
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up perl
         uses: shogo82148/actions-setup-perl@v1
         with:
