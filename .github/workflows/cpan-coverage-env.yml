@@ -1,0 +1,37 @@
+name: Test Coverage
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: false
+        type: string
+        default: '{}'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    container: davorg/perl-coveralls:latest
+    name: Test coverage
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set environment
+        shell: perl {0}
+        run: |
+          use JSON::PP;   
+          my $context = decode_json('${{ inputs.environment }}');
+          if (%$context) {
+            open(my $fh, '>>', $ENV{GITHUB_ENV}); 
+            for my $item ( keys %$context ) {
+              print $fh "$item=$context->{$item}\n";
+            }
+          }
+      - name: Install modules
+        run: cpanm -n --installdeps .
+      - name: Coverage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cover -test -report Coveralls
