@@ -10,7 +10,7 @@ rules:
   # Document start is not required for GitHub Actions
   document-start: disable
 
-  # Allow trailing empty lines at the end of files
+  # Limit trailing empty lines to 1 maximum
   empty-lines:
     max: 1
 
