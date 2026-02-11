@@ -15,7 +15,8 @@ on:
       - '.yamllint'
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   yaml-lint:
