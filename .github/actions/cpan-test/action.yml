@@ -25,6 +25,39 @@ runs:
       with:
         perl-version: ${{ inputs.perl_version }}
 
+    - name: Fix PERL5LIB for MSYS on Windows
+      if: ${{ startsWith(inputs.os, 'windows') }}
+      shell: bash
+      run: |
+        # Convert Windows paths to MSYS paths and semicolons to colons
+        if [ -n "$PERL5LIB" ]; then
+          echo "Original PERL5LIB: $PERL5LIB"
+
+          # Split on semicolons, convert each path, rejoin with colons
+          NEW_PERL5LIB=""
+          IFS=';' read -ra PATHS <<< "$PERL5LIB"
+          for path in "${PATHS[@]}"; do
+            # Convert Windows path (D:\path) to MSYS path (/d/path)
+            if command -v cygpath >/dev/null 2>&1; then
+              msys_path=$(cygpath -u "$path")
+            else
+              # Manual conversion if cygpath is not available
+              # Convert D:\path to /d/path
+              msys_path=$(echo "$path" | \
+                sed -e 's|^\([A-Za-z]\):|/\L\1|' -e 's|\\|/|g')
+            fi
+            if [ -n "$NEW_PERL5LIB" ]; then
+              NEW_PERL5LIB="$NEW_PERL5LIB:$msys_path"
+            else
+              NEW_PERL5LIB="$msys_path"
+            fi
+          done
+
+          # Update environment
+          echo "PERL5LIB=$NEW_PERL5LIB" >> "$GITHUB_ENV"
+          echo "Converted PERL5LIB to MSYS format: $NEW_PERL5LIB"
+        fi
+
     - name: Perl version
       run: perl -V
       shell: bash
