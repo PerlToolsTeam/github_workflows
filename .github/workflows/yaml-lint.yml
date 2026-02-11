@@ -3,6 +3,9 @@ name: YAML Linting
 on:
   workflow_call:
 
+permissions:
+  contents: read
+
 jobs:
   yaml-lint:
     runs-on: ubuntu-latest

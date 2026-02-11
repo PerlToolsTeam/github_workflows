@@ -15,6 +15,8 @@ on:
       - '.yamllint'
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   yaml-lint:
     uses: ./.github/workflows/yaml-lint.yml
