@@ -88,4 +88,3 @@ runs:
         name: cpan_log
         path: /home/runner/.cpanm/work/*/build.log
         retention-days: 5
-

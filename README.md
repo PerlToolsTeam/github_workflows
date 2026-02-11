@@ -49,6 +49,10 @@ Runs `perlcritic` against your Perl code
 
 * ***level***: A number from 1 to 5 defining how brutal `perlcritic` will be. The default is 5
 
+#### yaml-lint
+
+Lints YAML files using `yamllint` to ensure they follow best practices and are properly formatted
+
 ### In early development
 
 These workflows aren't guaranteed to do what they need to yet. They'll probably change quickly

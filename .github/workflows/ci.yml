@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.yml'
+      - '**.yaml'
+      - '.yamllint'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.yml'
+      - '**.yaml'
+      - '.yamllint'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  yaml-lint:
+    uses: ./.github/workflows/yaml-lint.yml

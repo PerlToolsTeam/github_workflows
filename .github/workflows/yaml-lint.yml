@@ -1,0 +1,19 @@
+name: YAML Linting
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  yaml-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install yamllint
+        run: |
+          pip install yamllint==1.38.0
+      - name: Run yamllint
+        run: |
+          yamllint .
