@@ -19,4 +19,3 @@ jobs:
         run: |
           perlcritic -${{ inputs.level }} .
         continue-on-error: true
-

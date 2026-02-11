@@ -38,4 +38,3 @@ jobs:
           jq -r .name META.json
           jq -r .version META.json
           ls -l *.tar.gz
-

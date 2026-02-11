@@ -15,4 +15,3 @@ jobs:
         run: |
           perlcritic .
         continue-on-error: true
-
