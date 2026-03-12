@@ -29,6 +29,11 @@ runs:
       run: perl -V
       shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
 
+    - name: Update Module::Build, ExtUtils::MakeMaker, and cpanm for Perl 5.40+
+      run: |
+        cpanm --notest --reinstall Module::Build ExtUtils::MakeMaker
+        cpanm --self-upgrade
+
     - name: Install modules
       run: |
         cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
