@@ -33,7 +33,6 @@ runs:
       shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
       run: |
         cpanm --notest --reinstall Module::Build ExtUtils::MakeMaker
-        cpanm --self-upgrade
 
     - name: Install modules
       run: |
@@ -83,7 +82,7 @@ runs:
       if: ${{ failure() && inputs.os == 'windows-latest' }}
       uses: actions/upload-artifact@v5
       with:
-        name: cpan_log
+        name: cpan_log-results-${{ github.run_id }}-${{ github.job }}
         path: C:\Users\RUNNER~1\.cpanm\work\*\build.log
         retention-days: 5
 
@@ -91,6 +90,6 @@ runs:
       if: ${{ failure() && inputs.os != 'windows-latest' }}
       uses: actions/upload-artifact@v5
       with:
-        name: cpan_log
+        name: cpan_log-results-${{ github.run_id }}-${{ github.job }}
         path: /home/runner/.cpanm/work/*/build.log
         retention-days: 5
