@@ -65,6 +65,10 @@ runs:
         perl -MCPAN::Meta -e "print qq(CPAN::Meta $CPAN::Meta::VERSION\n)"
         perl -MParse::CPAN::Meta -e "print qq(Parse::CPAN::Meta $Parse::CPAN::Meta::VERSION\n)"
 
+    - name: Set up MSVC build tools
+      if: startsWith(inputs.os, 'windows')
+      uses: ilammy/msvc-dev-cmd@v1
+
     - name: Install modules
       run: |
         cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
