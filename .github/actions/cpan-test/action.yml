@@ -57,6 +57,14 @@ runs:
           JSON::PP \
           Test::Harness
 
+    - name: Show toolchain versions [Windows]
+      if: startsWith(inputs.os, 'windows')
+      shell: pwsh
+      run: |
+        perl -MExtUtils::MakeMaker -e "print qq(ExtUtils::MakeMaker $ExtUtils::MakeMaker::VERSION\n)"
+        perl -MCPAN::Meta -e "print qq(CPAN::Meta $CPAN::Meta::VERSION\n)"
+        perl -MParse::CPAN::Meta -e "print qq(Parse::CPAN::Meta $Parse::CPAN::Meta::VERSION\n)"
+
     - name: Install modules
       run: |
         cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
@@ -102,7 +110,7 @@ runs:
       shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
 
     - name: Archive CPAN logs on Windows
-      if: ${{ failure() && inputs.os == 'windows-latest' }}
+      if: ${{ failure() && startWith(inputs.os, 'windows' }}
       uses: actions/upload-artifact@v5
       with:
         name: cpan_log-results-${{ github.run_id }}-${{ github.job }}
@@ -110,7 +118,7 @@ runs:
         retention-days: 5
 
     - name: Archive CPAN logs on Unix
-      if: ${{ failure() && inputs.os != 'windows-latest' }}
+      if: ${{ failure() && !startsWith(inputs.os, 'windows' }}
       uses: actions/upload-artifact@v5
       with:
         name: cpan_log-results-${{ github.run_id }}-${{ github.job }}
