@@ -29,18 +29,9 @@ runs:
       run: perl -V
       shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
 
-    - name: Update Module::Build, ExtUtils::MakeMaker, and cpanm for Perl 5.40+
-      shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
-      run: |
-        cpanm --notest --reinstall Module::Build ExtUtils::MakeMaker
-
     - name: Upgrade CPAN toolchain (metadata + installer)
       shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
       run: |
-        # Ensure we have a recent cpanm first
-        cpanm --notest --quiet App::cpanminus
-        cpanm --notest --quiet --self-upgrade
-
         # Upgrade the pieces that generate/read MYMETA and other metadata
         cpanm --notest --quiet --reinstall \
           ExtUtils::MakeMaker \
