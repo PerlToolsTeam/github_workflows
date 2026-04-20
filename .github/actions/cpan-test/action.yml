@@ -32,16 +32,27 @@ runs:
     - name: Upgrade CPAN toolchain (metadata + installer)
       shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
       run: |
-        # Upgrade the pieces that generate/read MYMETA and other metadata
-        cpanm --notest --quiet --reinstall \
-          ExtUtils::MakeMaker \
-          Module::Build \
-          CPAN::Meta \
-          CPAN::Meta::Requirements \
-          CPAN::Meta::YAML \
-          Parse::CPAN::Meta \
-          JSON::PP \
-          Test::Harness
+        if ("${{ startsWith(inputs.os, 'windows') }}" -eq "True") {
+          cpanm --notest --quiet --reinstall `
+            ExtUtils::MakeMaker `
+            Module::Build `
+            CPAN::Meta `
+            CPAN::Meta::Requirements `
+            CPAN::Meta::YAML `
+            Parse::CPAN::Meta `
+            JSON::PP `
+            Test::Harness
+        } else {
+          cpanm --notest --quiet --reinstall \
+            ExtUtils::MakeMaker \
+            Module::Build \
+            CPAN::Meta \
+            CPAN::Meta::Requirements \
+            CPAN::Meta::YAML \
+            Parse::CPAN::Meta \
+            JSON::PP \
+            Test::Harness
+        }
 
     - name: Install modules
       run: |
