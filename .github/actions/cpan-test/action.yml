@@ -29,30 +29,33 @@ runs:
       run: perl -V
       shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
 
-    - name: Upgrade CPAN toolchain (metadata + installer)
-      shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
+    - name: Upgrade CPAN toolchain (metadata + installer) [Windows]
+      if: startsWith(inputs.os, 'windows')
+      shell: pwsh
       run: |
-        if ("${{ startsWith(inputs.os, 'windows') }}" -eq "True") {
-          cpanm --notest --quiet --reinstall `
-            ExtUtils::MakeMaker `
-            Module::Build `
-            CPAN::Meta `
-            CPAN::Meta::Requirements `
-            CPAN::Meta::YAML `
-            Parse::CPAN::Meta `
-            JSON::PP `
-            Test::Harness
-        } else {
-          cpanm --notest --quiet --reinstall \
-            ExtUtils::MakeMaker \
-            Module::Build \
-            CPAN::Meta \
-            CPAN::Meta::Requirements \
-            CPAN::Meta::YAML \
-            Parse::CPAN::Meta \
-            JSON::PP \
-            Test::Harness
-        }
+        cpanm --notest --quiet --reinstall `
+          ExtUtils::MakeMaker `
+          Module::Build `
+          CPAN::Meta `
+          CPAN::Meta::Requirements `
+          CPAN::Meta::YAML `
+          Parse::CPAN::Meta `
+          JSON::PP `
+          Test::Harness
+
+    - name: Upgrade CPAN toolchain (metadata + installer) [Unix]
+      if: ${{ !startsWith(inputs.os, 'windows') }}
+      shell: bash
+      run: |
+        cpanm --notest --quiet --reinstall \
+          ExtUtils::MakeMaker \
+          Module::Build \
+          CPAN::Meta \
+          CPAN::Meta::Requirements \
+          CPAN::Meta::YAML \
+          Parse::CPAN::Meta \
+          JSON::PP \
+          Test::Harness
 
     - name: Install modules
       run: |
