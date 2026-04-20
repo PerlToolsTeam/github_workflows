@@ -34,6 +34,24 @@ runs:
       run: |
         cpanm --notest --reinstall Module::Build ExtUtils::MakeMaker
 
+    - name: Upgrade CPAN toolchain (metadata + installer)
+      shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
+      run: |
+        # Ensure we have a recent cpanm first
+        cpanm --notest --quiet App::cpanminus
+        cpanm --notest --quiet --self-upgrade
+
+        # Upgrade the pieces that generate/read MYMETA and other metadata
+        cpanm --notest --quiet --reinstall \
+          ExtUtils::MakeMaker \
+          Module::Build \
+          CPAN::Meta \
+          CPAN::Meta::Requirements \
+          CPAN::Meta::YAML \
+          Parse::CPAN::Meta \
+          JSON::PP \
+          Test::Harness
+
     - name: Install modules
       run: |
         cpanm --notest --with-configure --with-develop --no-man-pages --installdeps .
