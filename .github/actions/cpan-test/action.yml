@@ -110,7 +110,7 @@ runs:
       shell: ${{ startsWith(inputs.os, 'windows') && 'powershell' || 'bash' }}
 
     - name: Archive CPAN logs on Windows
-      if: ${{ failure() && startWith(inputs.os, 'windows' }}
+      if: ${{ failure() && startsWith(inputs.os, 'windows' }}
       uses: actions/upload-artifact@v5
       with:
         name: cpan_log-results-${{ github.run_id }}-${{ github.job }}
