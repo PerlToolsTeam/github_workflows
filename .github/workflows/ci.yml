@@ -7,12 +7,16 @@ on:
       - '**.yml'
       - '**.yaml'
       - '.yamllint'
+      - 'tests/**'
+      - 'requirements-test.txt'
   pull_request:
     branches: [main]
     paths:
       - '**.yml'
       - '**.yaml'
       - '.yamllint'
+      - 'tests/**'
+      - 'requirements-test.txt'
   workflow_dispatch:
 
 permissions:
@@ -21,3 +25,12 @@ permissions:
 jobs:
   yaml-lint:
     uses: ./.github/workflows/yaml-lint.yml
+
+  coverage-workflow-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install test dependencies
+        run: python3 -m pip install -r requirements-test.txt
+      - name: Test coverage workflow
+        run: python3 -m unittest discover -s tests -v

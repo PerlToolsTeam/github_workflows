@@ -1,11 +1,8 @@
 name: Test Coverage
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   workflow_call:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   coverage:
     runs-on: ubuntu-latest
@@ -13,8 +10,20 @@ jobs:
     name: Test coverage
     steps:
       - uses: actions/checkout@v7
+      - name: Trust the checked-out workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Install modules
-        run: cpanm -n --installdeps .
+        run: cpanm --notest --with-configure --installdeps .
+      - name: Configure distribution
+        run: |
+          if [ -f Build.PL ]; then
+            perl Build.PL
+          elif [ -f Makefile.PL ]; then
+            perl Makefile.PL
+          else
+            echo "::error::No Build.PL or Makefile.PL found"
+            exit 1
+          fi
       - name: Coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
