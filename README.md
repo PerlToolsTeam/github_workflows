@@ -36,6 +36,20 @@ in the workflow. You can see the format of these lists from their default values
 
 Checks the test coverage for your Perl code and reports the results to Coveralls.io
 
+The workflow installs dependencies, including configure requirements, then
+configures the distribution explicitly before running
+`cover -test -report Coveralls`. It uses `Build.PL` when present, otherwise
+`Makefile.PL`, matching
+Devel::Cover's preference for a generated `Build` script. A missing build
+definition or a failed configure step fails the job. Devel::Cover builds and
+runs the tests under instrumentation; non-zero coverage exits remain failures.
+
+The container job trusts only the checked-out workspace via Git's
+`safe.directory` setting in the job's global configuration. This lets the
+Coveralls reporter read commit and remote metadata when the container user
+differs from the checkout owner. The reporter continues using the job's
+`GITHUB_TOKEN`.
+
 ##### Todo
 
 * Report to coverage tools other than coveralls.io
@@ -103,4 +117,25 @@ runs the CPAN test, coverage and `perlcritic` workflows would look like this:
 
       perlcritic:
         uses: PerlToolsTeam/github_workflows/.github/workflows/cpan-perlcritic.yml@main
+
+## Developing the coverage workflow
+
+The regression tests execute the workflow's shell steps with temporary
+distribution fixtures. They cover both builders, failed configuration,
+coverage failures, paths containing spaces, and Git's ownership checks.
+Dependency installation and report submission use local stand-ins, so these
+tests do not install Perl modules or contact Coveralls. Real integration
+validation should also run this workflow from a consumer distribution and
+confirm that tests execute and a non-empty report is submitted.
+
+Run them with Python 3, Perl, Git, and a POSIX shell available:
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-test.txt
+.venv/bin/python -m unittest discover -s tests -v
+```
+
+The repository's CI runs these tests alongside YAML linting. Release changes
+are recorded in [Changes.md](Changes.md).
 
